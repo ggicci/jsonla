@@ -22,8 +22,8 @@ namespace ggicci
  * 			you can easily access and modify the data in simple statements through
  * 			the Json object. Feel free to contact me to help my developing this
  * 			library. And you can fetch the source code from Github
- * 			<a href="http://baidu.com" title="ggicci::Json on github">here</a> or
- * 			my personal site <a href="http://ggicci.me/project/json/" title=
+ * 			<a href="https://github.com/ggicci/ggicci--json" title="ggicci::Json on github">here</a> or
+ * 			my personal site <a href="http://ggicci.me/works/json/" title=
  * 			"ggicci::Json on ggicci.me">here</a>. If just for usage, you can ignore
  * 			the inner classes(structs) in Json this document presents.
  * \author Ggicci <ggicci@163.com>
