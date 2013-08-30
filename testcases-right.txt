@@ -1,0 +1,66 @@
+# positives
+0
+0e3
+0E12
+0e+7
+0E-28
+0.1
+0.0306
+0.002e2
+0.19E+34
+0.209e-0
+0.3E-8
+7
+19
+9.0
+5.247
+21.732
+384932.3
+7.561e2
+81.0E+17
+8.1235e-9
+# negatives
+-0
+-0e3
+-0E12
+-0e+7
+-0E-28
+-0.1
+-0.0306
+-0.002e2
+-0.19E+34
+-0.209e-0
+-0.3E-8
+-7
+-19
+-9.0
+-5.247
+-21.732
+-384932.3
+-7.561e2
+-81.0E+17
+-8.1235e-9
+# string
+""
+"Hello Wrold"
+" 中 文 "
+"あいうえ"
+"\" name \\ \/ \b \f \n \r \t \n"
+"\u7412\u1782A\uB421"
+"mixed \u7412hello\u1782Aright\uB421"
+# bool and null
+true
+false
+null
+# object
+{}
+{"id": 1234}
+{  "name" : "Ggicci", "age": 21  }
+{ "mixed": { "sex": "man", "born-year": 1991, "optimistic": true, "girl-friend": null } }
+# array
+[1,2,3,4]
+[ 1, 2, 3, true, "mixed"]
+[     "nested", 3, ["here", 3, true, null] ]
+# integrated
+{ "name": "\u5510\u660E\u6770", "properties": [ "1991-11-10", 170, 54.5, "Fish", "Blue", "Happy"], "third": [false, {}, null, { "GO": true }, [{}], {"nest": [1,2,3]}] }
+["Ggicci", { "is": "a nice man", "this is": true, "reasons": [0, "love dog", { "what is": null } ] }]

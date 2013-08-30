@@ -112,4 +112,7 @@ There is a document [here](http://ggicci.me/works/json/doc) on my personal blog.
 ### Blogs
 [ggicci::Json A cute C++ library for easily parsing and manipulating JSON data structure](http://ggicci.me/wordpress/cpp/ggiccijson-cute-c-library-easily-parsing-manipulating-json-data-structure/)
 
+### Test Cases
+[Some Test Cases for ggicci::Json library](http://ggicci.me/wordpress/cpp/test-cases-ggiccijson-library/)
+
 

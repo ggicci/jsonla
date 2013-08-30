@@ -1,0 +1,83 @@
+# positives
+0.
+000
+023
+00.
+0e
+0E-
+0+
+0s
+0.E
+0.t
+0.32b
+0e5c
+0.23E-2S
+1.
+189g
+17.2e
+192.32E+
+9.2et
+382.E
+# negatives
+-0.
+-000
+-023
+-00.
+-0e
+-0E-
+-0+
+-0s
+-0.E
+-0.t
+-0.32b
+-0e5c
+-0.23E-2S
+-1.
+-189g
+-17.2e
+-192.32E+
+-9.2et
+-382.E
+# string
+"""
+"\"
+"Hello""
+"Rush \  "
+"wrong escape \p"
+"unicde \u781"
+"unicde \u3t24"
+# object
+{
+{1}
+{true}
+{"id"}
+{"id": }
+{"no close"
+{"no close2": 
+{"no close3": null
+{"age": 123s}
+{"wrong colon"; null}
+{"wrong string"": false}
+{"good": true,}
+{"pair": 32e+21, [12, 42]}
+{"hello": "world", "nest": { "error" }}
+# bool and null
+trues
+trx
+falsE
+Null
+# array
+[
+[,]
+[1,2,3,]
+["no close"
+["no close2", ["nest", 1,2]
+[1, 2, 3,, 4]
+["inner error", "\", 32]
+["nest object", null, true, {"hello", }]
+# integrated
+  
+["wrong token", p]
+["colon in array": "yes"]
+{'single quote error': false}
+{"null": Null, "array": [1, 2, 3, 4, d]}
