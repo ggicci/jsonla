@@ -99,7 +99,7 @@ Get Json String through Json Object
 More
 -------------------
 ### Note
-It's a beta version now, so there may exist potential bugs, if you found some bugs, please be sure
+It's a beta version now, so there may exist potential bugs, if you find some bugs, please be sure
 to tell me.
 
 ### Project Url
