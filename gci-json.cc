@@ -109,12 +109,19 @@ vector<string> Json::Keys() const
 	return keys;
 }
 
-Json& Json::Add(const Json& rhs)
+Json& Json::Push(const Json& rhs)
 {
-	TRACK("Json& Json::Add(const Json& rhs)");
+	TRACK("Json& Json::Push(const Json& rhs)");
 	switch (kind_)
 	{
-		case kNumber: case kString: case kBool: case kNull:
+		case kArray:
+		{
+			// Simply copy it and push it to the array.
+			ArrayData *data = CAST_JSON_ARR(data_);
+			data->push_back(new Json(rhs));
+			break;
+		}
+		case kNumber: case kString: case kBool: case kNull: case kObject:
 		{
 			// Copy the old one, and together with the new one,
 			// both are to pushed into an empty array. Finally
@@ -128,30 +135,20 @@ Json& Json::Add(const Json& rhs)
 			data_ = tmp;
 			break;
 		}
-		case kArray:
-		{
-			// Simply copy it and push it to the array.
-			ArrayData *data = CAST_JSON_ARR(data_);
-			data->push_back(new Json(rhs));
-			break;
-		}
 		default:
 		{
-			// You cant add a Json object to an object Json object directly,
-			// because the object Json object should have a pair, both \em name
-			// and \em value needed.
-			throw IllegalOperationException(IllegalOperationException::kAdd, DataTypeName());
+			throw IllegalOperationException(IllegalOperationException::kPush, DataTypeName());
 			break;
 		}
 	}
 	return *this;
 }
 
-Json& Json::Add(const string& key, const Json& val)
+Json& Json::AddProperty(const string& key, const Json& val)
 {
 	TRACK("Json& Json::Add(const string& key, const Json& val)");
 	if (!IsObject())
-	{ throw IllegalOperationException(IllegalOperationException::kAdd, DataTypeName()); }
+	{ throw IllegalOperationException(IllegalOperationException::kAddProperty, DataTypeName()); }
 	ObjectData *data = CAST_JSON_OBJ(data_);
 	// to call opeartor [] function to get a reference to the newly created Json object
 	// which is mapped to the \em pair named \em key.
@@ -783,7 +780,8 @@ const char* Json::IllegalOperationException::what() const throw()
 	{
 		case kExtract: { oss << "extract"; break; }
 		case kViolateAccess: { oss << "violate access"; break; }
-		case kAdd: { oss << "add"; break; }
+		case kPush: { oss << "push"; break; }
+		case kAddProperty: { oss << "add property"; break; }
 		case kRemove: { oss << "remove"; break; }
 		case kRetriveKeys: { oss << "retrive keys"; break; }
 		default : { oss << "unknown"; break; }

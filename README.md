@@ -61,26 +61,27 @@ Data Manipulation
 	// change the value "java" in "keywords" to "c++"
 	json["keywords"][2] = "c++";
 
-	// add two keywords "parser" and "manipulator" to "keywords"
-	json["keywords"].Add("parser").Add("manipulator");
+	// push two keywords "parser" and "manipulator" to "keywords" (array)
+	json["keywords"].Push("parser").Push("manipulator");
 
 	// remove keyword "ggicci"
-	json["keywords"].Remove(0); // cant cascade remove an array item
+	json["keywords"].Remove(0); // remove an array item, no cascade
 
 	// remove "version" and "cute"
 	json.Remove("version").Remove("cute"); // cascade for object
 
 	// add a KVP named "since", valued [2013, 8, 26] to json
-	json.Add("since", Json::Parse("[2013, 8, 26]"));
+	json.AddProperty("since", Json::Parse("[2013, 8, 26]")); // same as below
+	json["since"] = Json::Parse("[2013, 8, 26]");
 
 	// you can change the value, even from number to string
 	Json number = 1991;
 	number = "Hello World";
 	number = Json::Parse("[1, 2, 3]");
 
-	// you can add values to a number, a string, a bool, a null to make an array
+	// you can add values to a number, a string, a bool, a null, an object to make an array
 	Json val = true;
-	val.Add("hello").Add(null).Add(Json::Parse("{\"ack\": 1845}"));
+	val.Push("hello").Push(null).Push(Json::Parse("{\"ack\": 1845}"));
 	// --> Got [ true, "hello", null, { "ack" : 1845 } ]
 
 Get Json String through Json Object
@@ -88,10 +89,10 @@ Get Json String through Json Object
 
 	// Organize a json structure
 	Json json = Json::Parse("{}");
-	json.Add("name", "Ggicci").Add("birthday", Json::Parse("[1991, 11, 10]")).Add("characteritics", null);
+	json.AddProperty("name", "Ggicci").AddProperty("birthday", Json::Parse("[1991, 11, 10]")).AddProperty("characteritics", null);
 
 	Json &traits = json["characteritics"];
-	(traits = "compassionate").Add("independent");
+	(traits = "compassionate").Push("independent");
 
 	// Get the json string
 	cout << json.ToString() << endl;
@@ -99,12 +100,11 @@ Get Json String through Json Object
 More
 -------------------
 ### Note
-It's a beta version now, so there may exist potential bugs, if you find some bugs, please be sure
-to tell me.
+There may exist potential bugs, if you find some bugs, please be sure to let me know.
 
 ### Project Url
 - Github: [https://github.com/ggicci/ggicci--json](https://github.com/ggicci/ggicci--json)
-- GGICCI: [http://ggicci.me/works/json](http://ggicci.me/works/json)
+- GGICCI: [http://ggicci.me/works/json](http://ggicci.me/works/json) (not ready)
 
 ### Document
 There is a document [here](http://ggicci.me/works/json/doc) on my personal blog.

@@ -272,48 +272,34 @@ public:
 	std::vector<std::string> Keys() const; // get all keys of an object
 
 	/**
-	 * \brief Add a Json object to the current Json object (finally an array).
+	 * \brief Push a Json object to the current Json object (finally an array).
 	 *
-	 * If current Json object is a number, string, bool or null, it will be
+	 * If current Json object is a number, string, bool, null or object, it will be
 	 * converted to an array first and then push back \em rhs to this array.
 	 * If current Json object is an array, just simply push back \em rhs.
 	 * Otherwise, an exception will be thrown.
 	 * \note An exception may be thrown to indicate that it's a bad operation.
-	 * @param  rhs the Json object to add
+	 * @param  rhs the Json object to push
 	 * @return     The Json object finally got
 	 * 
 	 * <b>Example 1:</b>
 	 * \code{.cpp}
 	 * Json json = 10;
 	 * cout << json << endl; // 10
-	 * json.Add("fuck").Add("{Here will not be parsed}").Add(true);
+	 * json.Push("fuck").Push("{Here will not be parsed}").Push(true);
 	 * cout << json << endl;
 	 * // [ 10, "fuck", "{Here will not be parsed}", true ]
 	 * \endcode
-	 * <b>Example 2:</b>
-	 * \code{.cpp}
-	 * try
-	 * {
-	 * 	Json json = Json::Parse("{\"id\": 123}");
-	 * 	json.Add(1); // cause exception
-	 * }
-	 * catch (exception &e)
-	 * {
-	 * 	cout << e.what() << endl;
-	 * 	// output:
-	 * 	// OperationError: Illegal add opeartion on Object
-	 * }
-	 * \endcode
 	 */
-	Json& Add(const Json& rhs);
+	Json& Push(const Json& rhs);
 
 	/**
-	 * \brief Add a Json object to the current Json object (finally an object).
+	 * \brief AddProperty a Json object to the current Json object (finally an object).
 	 *
 	 * If this Json object doesn't represent an object (IsObject() == false), an exception
 	 * will be thrown. Otherwise, a KVP(key-value pair) will be insert into this object
 	 * Json object, which consists of \em key and \em val. The function returns the 
-	 * referece to this object, so you can call Add function in a cascade way.
+	 * referece to this object, so you can call AddProperty function in a cascade way.
 	 * \note An exception may be thrown to indicate that it's a bad operation.
 	 * @param  key the key(name) of the KVP
 	 * @param  val the value of the KVP
@@ -322,8 +308,8 @@ public:
 	 * <b>Example 1:</b>
 	 * \code{.cpp}
 	 * Json json = Json::Parse("{}");
-	 * json.Add("name", "Ggicci");
-	 * json.Add("characteristics", Json::Parse("[\"optimitic\", \"sympathetic\"]"));
+	 * json.AddProperty("name", "Ggicci");
+	 * json.AddProperty("characteristics", Json::Parse("[\"optimitic\", \"sympathetic\"]"));
 	 * cout << json << endl;
 	 * // output:
 	 * // { "characteristics": [ "optimitic", "sympathetic" ], "name": "Ggicci" }
@@ -334,7 +320,7 @@ public:
 	 * try
 	 * {
 	 * 	Json json = Json::Parse("[1, 2, 3]"); 
-	 * 	json.Add("name", "Ggicci"); // cause exception
+	 * 	json.AddProperty("name", "Ggicci"); // cause exception
 	 * } 
 	 * catch (exception &e) 
 	 * { 
@@ -344,7 +330,7 @@ public:
 	 * }
 	 * \endcode
 	 */
-	Json& Add(const std::string& key, const Json& val);
+	Json& AddProperty(const std::string& key, const Json& val);
 
 	/**
 	 * \brief Remove a Json object from an array or object.
@@ -702,9 +688,10 @@ private:
 	public:
 		enum OperationKind
 		{
-			kExtract, 		///< Extract data from a Json object through keywords(or type) overloading functions
+			kExtract, 		///< Extract data from a Json object through keywords(or type) overloading functions.
 			kViolateAccess,	///< Maybe array out of bounds.
-			kAdd,  			///< Add a Json object to current, finally you will get an array or stay as an object
+			kPush,			///< Push a Json object to current array, or make an array together with single Json object.
+			kAddProperty,  	///< Add a KVP to current object Json object.
 			kRemove,		///< Remove a Json object in an array or Remove a Pair in object
 			kRetriveKeys	///< Retrive all the keys an object Json object holds
 		};
