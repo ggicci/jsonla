@@ -24,35 +24,25 @@ Json::Json()
 Json::Json(int num) : Json((double)num) {}
 
 Json::Json(double num)
-	:kind_(Json::kNumber)
-{
-	data_ = new double(num);
-}
+	:kind_(Json::kNumber) { data_ = new double(num); }
 
 Json::Json(const string& str) : Json(str.c_str()) { }
 
 Json::Json(const char* str)
-	:kind_(Json::kString)
-{
-	data_ = new string(str);
-}
+	:kind_(Json::kString) { data_ = new string(str); }
 
 Json::Json(bool boo)
-	:kind_(Json::kBool)
-{
-	data_ = new bool(boo);
-}
+	:kind_(Json::kBool) { data_ = new bool(boo); }
 
 Json::Json(const Json& rhs)
 {
-	TRACK("Json::Json(const Json& rhs)");
 	// Do deep copy from \em rhs.
 	CopyData(rhs);
 }
 
 Json::~Json()
 {
-	TRACK("Json::~Json()");
+	TRACK("Json::~Json() -----------------------------------> " << *this);
 	DestroyData();
 }
 
@@ -654,12 +644,21 @@ Json Json::Assist::ConsumeObject()
 	else // at least need one pair
 	{
 		Retract();
-		obj.insert(ConsumePair());
+		try { obj.insert(ConsumePair()); }
+		catch (exception& e) { DestroyObjectData(obj); UnexpectedToken(); }
 		while (true) // * loop
 		{
 			if ('}' == NextCharacter()) { break; }
-			else if (',' == character) { obj.insert(ConsumePair()); }
-			else { UnexpectedToken(); }
+			else if (',' == character)
+			{ 
+				try { obj.insert(ConsumePair()); }
+				catch (exception& e) { DestroyObjectData(obj); UnexpectedToken(); }
+			}
+			else
+			{
+				DestroyObjectData(obj);
+				UnexpectedToken();
+			}
 		}
 	}
 	return Json(obj);
@@ -675,12 +674,20 @@ Json Json::Assist::ConsumeArray()
 	else // at least one value
 	{
 		Retract();
-		arr.push_back(new Json(ConsumeValue()));
+		try { arr.push_back(new Json(ConsumeValue())); }
+		catch (exception& e) { DestroyArrayData(arr); UnexpectedToken(); }
 		while (true) // * loop
 		{
 			if (']' == NextCharacter()) { break; }
-			else if (',' == character) { arr.push_back(new Json(ConsumeValue())); }
-			else { UnexpectedToken(); }
+			else if (',' == character) {
+				try { arr.push_back(new Json(ConsumeValue())); }
+				catch(exception& e) { DestroyArrayData(arr); UnexpectedToken(); }
+			}
+			else
+			{
+				DestroyArrayData(arr);
+				UnexpectedToken();
+			}
 		}
 	}
 	return Json(arr);
@@ -746,6 +753,26 @@ void Json::Assist::SkipWhitespaces()
 
 bool Json::Assist::EOL() const { return '\0' == character; }
 void Json::Assist::UnexpectedToken() { throw Json::UnexpectedTokenException(character, pos); }
+
+void Json::Assist:: DestroyArrayData(ArrayData& arr)
+{
+	TRACK("void Json::Assist:: DestroyArrayData(ArrayData& arr)");
+	for (ArrayData::iterator it = arr.begin(); it != arr.end(); ++it)
+	{
+		delete *it;
+		*it = 0;
+	}
+}
+
+void Json::Assist::DestroyObjectData(ObjectData& obj)
+{
+	TRACK("void Json::Assist::DestroyObjectData(ObjectData& obj)");
+	for (ObjectData::iterator it = obj.begin(); it != obj.end(); ++it)
+	{
+		delete it->second;
+		it->second = 0;
+	}
+}
 
 /* Struct UnexpectedTokenException */
 Json::UnexpectedTokenException::UnexpectedTokenException(char ch, int pos)

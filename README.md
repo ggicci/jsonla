@@ -25,10 +25,12 @@ Data Extraction
 
 	Json json = Json::Parse("124.8");
 	int number = json;
+	double number = json;
+	float number = (float)json;
 	
-	bool isRight = Json::Parse("true");
+	bool isright = Json::Parse("true");
 
-	bool isNull = Json::Parse("null").IsNull();
+	bool isnull = Json::Parse("null").IsNull();
 
 ###String
 	

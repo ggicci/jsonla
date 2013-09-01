@@ -91,29 +91,29 @@ public:
 	/**
 	 * \brief Get a Json object from \b int.
 	 */
-	Json(int num);
+	explicit Json(int num);
 
 	/**
 	 * \brief Get a Json object from \b double.
 	 */
-	Json(double num);
+	explicit Json(double num);
 
 	/**
 	 * \brief Get a Json object from \b string.
 	 * \note the string \em str will not be parsed.
 	 */
-	Json(const std::string& str);
+	explicit Json(const std::string& str);
 
 	/**
 	 * \brief Get a Json object from \b string.
 	 * \note the string \em str will not be parsed.
 	 */
-	Json(const char* str);
+	explicit Json(const char* str);
 
 	/**
 	 * \brief Get a Json object from \b bool.
 	 */
-	Json(bool boo);
+	explicit Json(bool boo);
 
 	/**
 	 * \brief Deep copy constructor.
@@ -657,14 +657,13 @@ private:
 		void SkipWhitespaces();
 
 		/**
-		 * \brief Throw UnexpectedTokenException to indicate the illegal end of input.
-		 */
-		void UnexpectedEnd();
-
-		/**
 		 * \brief Throw UnexpectedTokenException to indicate an unexpected token in \em source.
 		 */
 		void UnexpectedToken();
+
+		// Updated: 2013.09.01 - by Ggicci
+		void DestroyArrayData(ArrayData& arr);
+		void DestroyObjectData(ObjectData& obj);
 	};
 
 	/**
