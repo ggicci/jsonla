@@ -4,118 +4,173 @@ ggicci::json
 A cute C++ library for easily parsing and manipulating JSON data structure.
 
 Parser
-----------------------
-Convert a json structural string to a C++ object. And you can do things you want on this C++ object.
-You might just want to extract the data you want a json string represents. Or you might also want to
-modify the data in this json string. With this library, you can do all of these things on a C++
-object parsed from your json string through simple statements. It's convienent.
+------
+Convert a json string to a plain C++ object. Then you can retrieve data or modify them by operating on the C++ object.
 
 Now you have a json structural string like **{ "year": 2013, "month": 8, "day": 29 }**, and just use
-the static function `ggicci::Json::Parse(const char*)` to get a `ggicci::Json` object. Then you can
-do whatever you want on this object. See below.
+the static function `ggicci::Json::Parse(const char*)` to get a `ggicci::Json` object. Then you can do what you want on it. See below.
 
 Files to Include
----------------------
+----------------
 There're only two files: `gci-json.h` and `gci-json.cc`. You have to include `gci-json.h`. And the
-`namespace` is `ggicci`. We assume that `using namespace ggicci;` already exists in the code below.
+`namespace` is `ggicci`. We assume that `using namespace ggicci;` already declared.
 
-Data Extraction
-------------------------
-###Number, true, false, null
 
-	Json json = Json::Parse("124.8");
-	int number = json;
-	double number = json;
-	float number = (float)json;
-	
-	bool isright = Json::Parse("true");
+Manipulation
+------------
+### Construct a Json Object
 
-	bool isnull = Json::Parse("null").IsNull();
+	// from int
+	Json json(3);
+	// from double
+	Json json(4.23);
+	// from bool
+	Json json(true);
+	// from string, no parse
+	Json json("hello world");
+	// from a json string, parse
+	Json json = Json::Parse("[1, false, null, {\"name\": \"Ggicci\", \"age\": 21}");
+	// null
+	Json json; // json.IsNull(); --> true
 
-###String
-	
-	Json json = Json::Parse("\"Hello World!\"");
-	const char* hello = json;
-	string hello2 = json;
+### Data Retrieving
 
-###Object
-
-	Json json = Json::Parse("{\"id\": 1991, \"name\": \"Ggicci\"}");
-	// extract a value specified by a key(name)
-	const Json &ref = json["id"];  // get the reference
-	Json copy = json["id"];  // get a copy
-	const Json *pid = &json["id"]; // get a pointer to this value
-
-###Array
-
-	Json json = Json::Parse("[1, 2, 3, 4]");
-	// extract a value specified by the index
-	int first = json[0];
-	int second = json[1];
-
-Data Manipulation
------------------------------------
-
-	Json json = Json::Parse("{ \"author\": \"Ggicci\", \"version\": \"1.0 Beta\", \"keywords\": [\"ggicci\", \"json\", \"java\"], \"cute\": true }");
-
-	// change value of the version
-	json["version"] = "1.0";
-
-	// change the value "java" in "keywords" to "c++"
-	json["keywords"][2] = "c++";
-
-	// push two keywords "parser" and "manipulator" to "keywords" (array)
-	json["keywords"].Push("parser").Push("manipulator");
-
-	// remove keyword "ggicci"
-	json["keywords"].Remove(0); // remove an array item, no cascade
-
-	// remove "version" and "cute"
-	json.Remove("version").Remove("cute"); // cascade for object
-
-	// add a KVP named "since", valued [2013, 8, 26] to json
-	json.AddProperty("since", Json::Parse("[2013, 8, 26]")); // same as below
-	json["since"] = Json::Parse("[2013, 8, 26]");
-
-	// you can change the value, even from number to string
-	Json number = 1991;
-	number = "Hello World";
-	number = Json::Parse("[1, 2, 3]");
-
-	// you can add values to a number, a string, a bool, a null, an object to make an array
-	Json val = true;
-	val.Push("hello").Push(null).Push(Json::Parse("{\"ack\": 1845}"));
-	// --> Got [ true, "hello", null, { "ack" : 1845 } ]
-
-Get Json String through Json Object
-----------------------------------------
-
-	// Organize a json structure
-	Json json = Json::Parse("{}");
-	json.AddProperty("name", "Ggicci").AddProperty("birthday", Json::Parse("[1991, 11, 10]")).AddProperty("characteritics", null);
-
-	Json &traits = json["characteritics"];
-	(traits = "compassionate").Push("independent");
-
-	// Get the json string
+	Json json = Json::Parse("{				\
+		\"id\": 20130192,					\
+		\"user\": \"ggicci\",				\
+		\"mail\": \"ggicci@163.com\",		\
+		\"password\": \"md5 code here\",	\
+		\"birthday\": 19911110,				\
+		\"gender\": 1, 						\
+		\"tags\": [							\
+			\"program fans\",				\
+			\"dog\",						\
+			\"nightbird\",					\
+			\"anime fans\",					\
+			\"almost perfectionist\"		\
+		],									\
+		\"motto\": null						\
+	}");
 	cout << json.ToString() << endl;
+	// output: 
+	// { "birthday": 1.99111e+007, "gender": 1, "id": 2.01302e+010, "mail": "ggicci@163.com", "motto": null, "password": "md5 code here", "tags": [ "program fans", "dog", "nightbird", "anime fans", "almost perfectionist" ], "user": "ggicci" }
+
+	cout << json["id"].AsInt() << endl; // output: 20130192
+	cout << json["user"].AsString() << endl; // output: ggicci
+	cout << (json["motto"].IsNull() ? "lazy man leaves nothing..."
+		: json["motto"].AsString()) << endl; // output: lazy man leaves nothing...
+
+	// Traverse Array
+	Json &tags = json["tags"];
+	for (int i = 0; i < tags.Size(); ++i)
+	{
+		cout << tags[i].AsString() << endl;
+	}
+	// output:
+	// program fans
+	// dog
+	// nightbird
+	// anime fans
+	// almost perfectionist
+
+	// Traverse Object
+	vector<string> keys = json.Keys();
+	for (vector<string>::const_iterator cit = keys.begin();
+		cit != keys.end(); ++cit)
+	{
+		cout << *cit << ": " << json[cit->c_str()].ToString() << endl;
+	}
+	// output:
+	// birthday: 1.99111e+007
+	// gender: 1
+	// id: 2.01302e+007
+	// mail: "ggicci@163.com"
+	// motto: null
+	// password: "md5 code here"
+	// tags: [ "program fans", "dog", "nightbird", "anime fans", "almost perfectionist" ]
+	// user: "ggicci"
+	
+### Data Modification
+
+	// Assignment
+	Json json;		// null
+	json = 1;		// 1
+	json = 3.234;	// 3.234
+	json = true;	// true
+	json = "hello";	// "hello"
+	json = Json::Parse("[1, 2, 3, 4]"); // array
+	json = Json();	// null
+
+	// Reference
+	Json json = Json::Parse("[1, 2, 3, 4]");
+	json[0] = 0; // [0, 2, 3, 4]
+	Json &second = json[1];
+	second = "hello"; // [ 0, "hello", 3, 4 ]
+
+	// Copy
+	Json json = Json::Parse("[1, 2, 3, 4]");
+	Json co_third = json[2];
+	co_third = true; // [1, 2, 3, 4]
+
+	// Push Values to Array
+	Json json(1);
+	json.Push(Json("hello")).Push(Json()).Push(Json::Parse("{}"));
+	// [ 1, "hello", null, {  } ]
+
+	// Add Properties to an Object
+	Json json = Json::Parse("{}");
+	json.AddProperty("id", Json(1))
+		.AddProperty("name", Json("ggicci"))
+		.AddProperty("motto", Json());
+	// { "id": 1, "motto": null, "name": "ggicci" }
+	// Exception(a bad conversion) will be thrown if you apply
+	// AddProperty() on a non-object Json object.
+
+	// Remove Item from an Array, no cascade
+	Json json = Json::Parse("[1, 2, 3, 4]");
+	json.Remove(0);
+	json.Remove(1);
+	json.Remove(8); // invalid index do noting
+	cout << json.ToString() << endl;
+	// [ 2, 4 ]
+
+	// Remove Item from an Object, can cascade
+	Json json = Json::Parse("{ \"id\": 123, \"name\": \"ggicci\", \"gender\": 1 }");
+	json.Remove("id").Remove("gender").Remove("age");
+	cout << json.ToString() << endl;
+	// { "name": "ggicci" }
+
+### Exception Handling
+	
+	// Parse Exception
+	try
+	{
+		Json json = Json::Parse("[1, 2, 3, 4, ]");
+	}
+	catch (exception& e)
+	{
+		cout << e.what() << endl; // SyntaxError: Unexpected token ] at pos 13
+	}
+
+	// Convert Exception
+	try
+	{
+		Json json = Json::Parse("[1, 2, 3, 4, 5]");
+		json[0].AsString(); // should use AsInt() or AsDouble().
+	}
+	catch (exception& e)
+	{
+		cout << e.what() << endl; // a bad conversion
+	}	
 
 More
--------------------
+----
 ### Note
-There may exist potential bugs, if you find some bugs, please be sure to let me know.
+There may exist potential bugs, if you found some bugs, please be sure to let me know.
 
 ### Project Url
 - Github: [https://github.com/ggicci/ggicci--json](https://github.com/ggicci/ggicci--json)
-- GGICCI: [http://ggicci.me/works/json](http://ggicci.me/works/json) (not ready)
+- GGICCI: [http://ggicci.me/works/json](http://ggicci.me/works/json)
 
 ### Document
 There is a document [here](http://ggicci.me/works/json/doc) on my personal blog.
-
-### Blogs
-[ggicci::Json A cute C++ library for easily parsing and manipulating JSON data structure](http://ggicci.me/wordpress/cpp/ggiccijson-cute-c-library-easily-parsing-manipulating-json-data-structure/)
-
-### Test Cases
-[Some Test Cases for ggicci::Json library](http://ggicci.me/wordpress/cpp/test-cases-ggiccijson-library/)
-
-
