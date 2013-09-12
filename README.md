@@ -173,4 +173,4 @@ There may exist potential bugs, if you found some bugs, please be sure to let me
 - GGICCI: [http://ggicci.me/works/json](http://ggicci.me/works/json)
 
 ### Document
-There is a document [here](http://ggicci.me/works/json/doc) on my personal blog.
+The document is in **doc.zip**.
