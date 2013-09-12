@@ -600,7 +600,9 @@ Json* Json::Parser::ConsumeArray()
 Json::Pair Json::Parser::ConsumePair()
 {
 	TRACK("Json::Parser::Pair Json::Parser::ConsumePair()");
-	string key(ConsumeString()->AsString());
+	Json* pkey = ConsumeString();
+	string key(pkey->AsString());
+	delete pkey;
 	SkipWhitespaces();
 	ConsumeSpecific(":");
 	Json *value = ConsumeValue();
