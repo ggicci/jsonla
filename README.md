@@ -168,9 +168,5 @@ More
 ### Note
 There may exist potential bugs, if you found some bugs, please be sure to let me know.
 
-### Project Url
-- Github: [https://github.com/ggicci/ggicci--json](https://github.com/ggicci/ggicci--json)
-- GGICCI: [http://ggicci.me/works/json](http://ggicci.me/works/json)
-
 ### Document
 The document is in **doc.zip**.
