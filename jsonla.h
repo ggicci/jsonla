@@ -1,12 +1,12 @@
-#ifndef GGICCI_JSON_H_
-#define GGICCI_JSON_H_ 
+#ifndef GGICCI_JSONLA_H_
+#define GGICCI_JSONLA_H_
 
 #define NDEBUG
 #ifdef _DEBUG
 #define TRACK(DESC) do {std::cout << "--> " << DESC << std::endl;} while (0);
 #endif
 #ifdef NDEBUG
-#define TRACK(DESC) 
+#define TRACK(DESC)
 #endif
 
 #include <iostream>
@@ -703,4 +703,4 @@ namespace ggicci
 
 }
 
-#endif // GGICCI_JSON_H_
+#endif // GGICCI_JSONLA_H_
