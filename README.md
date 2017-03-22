@@ -1,5 +1,5 @@
-ggicci::json
-============
+jsonla
+======
 
 A cute C++ library for easily parsing and manipulating JSON data structure.
 
@@ -12,7 +12,7 @@ the static function `ggicci::Json::Parse(const char*)` to get a `ggicci::Json` o
 
 Files to Include
 ----------------
-There're only two files: `gci-json.h` and `gci-json.cc`. You have to include `gci-json.h`. And the
+There're only two files: `jsonla.h` and `jsonla.cc`. You have to include `jsonla.h`. And the
 `namespace` is `ggicci`. We assume that `using namespace ggicci;` already declared.
 
 
@@ -167,6 +167,3 @@ More
 ----
 ### Note
 There may exist potential bugs, if you found some bugs, please be sure to let me know.
-
-### Document
-The document is in **doc.zip**.
